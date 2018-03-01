@@ -16,3 +16,18 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// List all posts
+Route::get('posts', 'PostController@index');
+
+// Show single post
+Route::get('post/{id}', 'PostController@show');
+
+// Add a new post
+Route::post('post', 'PostController@store');
+
+// Modify an existing post
+Route::put('post', 'PostController@store');
+
+// Delete a post
+Route::delete('post', 'PostController@destroy');
