@@ -1,10 +1,28 @@
 <template>
     <div class="container">
-        <div class="row">
-            <h2 class="mr-4" aria-describedby="postDate">{{ post.title }}</h2>
-            <div class="btn-group mt-2" role="group">
-                <button class="btn button btn-sm btn-warning"><i class="fas fa-edit"></i></button>
-                <button class="btn button btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-minus"></i></button>
+            <div v-if="!edit">
+                <div class="row">
+                    <h2 class="mr-4" aria-describedby="postDate">{{ post.title }}</h2>
+                    <div class="btn-group mt-2" role="group">
+                        <button class="btn button btn-sm btn-warning" @click="editHandler"><i class="fas fa-edit"></i></button>
+                        <button class="btn button btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-minus"></i></button>
+                    </div>
+                    <p class="text-justify">{{ post.body }}</p>
+                </div>
+                <small class="postDate form-text text-muted mb-4">Created at: {{ post.created_at }}</small>
+            </div>
+            <div v-else>
+                <form @submit="onSubmit">
+                    <div class="form-group">
+                        <label for="postTitle">Title</label>
+                        <input v-model="post.title" type="text" class="form-control" id="postTitle" placeholder="Enter post title">
+                    </div>
+                    <div class="form-group">
+                        <label for="postBody">Body</label>
+                        <textarea v-model="post.body" class="form-control" id="postBody" placeholder="Enter post body" rows="5"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
             <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -25,10 +43,6 @@
                     </div>    
                 </div> 
             </div>
-        </div>
-        <small class="postDate form-text text-muted mb-4">Created at: {{ post.created_at }}</small>
-        <p class="text-justify">{{ post.body }}</p>
-        
     </div>
 </template>
 
@@ -37,10 +51,10 @@
         props: ['postid'],
         data() {
             return {
+                edit: false,
                 post: {
                     title: '',
                     body: '',
-                    created_at: ''
                 },
             }
         },
@@ -48,6 +62,29 @@
             this.fetchPost(this.postid);
         },
         methods: {
+            editHandler() {
+                this.edit = true
+            },
+            onSubmit(evt) {
+               evt.preventDefault()
+                fetch('/api/post', {
+                    method: 'PUT',
+                    headers: {
+                        "content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        post_id: this.postid,
+                        title: this.post.title,
+                        body: this.post.body
+                    })
+                }).then(data => {
+                    console.log('Request succeeded with response', data);
+                    window.location.href = '/post/' + this.postid;
+                })
+                .catch(error => {
+                    console.log('Request failed', error);
+                });
+            },
             deleteHandler() {
                 fetch('/api/post/' + this.postid, {
                     method: 'DELETE',

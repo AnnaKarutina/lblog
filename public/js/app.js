@@ -43952,15 +43952,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['postid'],
     data: function data() {
         return {
+            edit: false,
             post: {
                 title: '',
-                body: '',
-                created_at: ''
+                body: ''
             }
         };
     },
@@ -43969,6 +43983,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        editHandler: function editHandler() {
+            this.edit = true;
+        },
+        onSubmit: function onSubmit(evt) {
+            var _this = this;
+
+            evt.preventDefault();
+            fetch('/api/post', {
+                method: 'PUT',
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    post_id: this.postid,
+                    title: this.post.title,
+                    body: this.post.body
+                })
+            }).then(function (data) {
+                console.log('Request succeeded with response', data);
+                window.location.href = '/post/' + _this.postid;
+            }).catch(function (error) {
+                console.log('Request failed', error);
+            });
+        },
         deleteHandler: function deleteHandler() {
             fetch('/api/post/' + this.postid, {
                 method: 'DELETE'
@@ -43980,12 +44018,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         fetchPost: function fetchPost(id) {
-            var _this = this;
+            var _this2 = this;
 
             fetch('/api/post/' + id).then(function (res) {
                 return res.json();
             }).then(function (res) {
-                _this.post = res.data;
+                _this2.post = res.data;
             });
         }
     }
@@ -44040,69 +44078,161 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row" }, [
-      _c(
-        "h2",
-        { staticClass: "mr-4", attrs: { "aria-describedby": "postDate" } },
-        [_vm._v(_vm._s(_vm.post.title))]
-      ),
-      _vm._v(" "),
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "modal fade",
-          attrs: {
-            id: "deleteModal",
-            tabindex: "-1",
-            role: "dialog",
-            "aria-labelledby": "deleteModalLabel",
-            "aria-hidden": "true"
-          }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "modal-dialog", attrs: { role: "document" } },
-            [
-              _c("div", { staticClass: "modal-content" }, [
-                _vm._m(1),
+    !_vm.edit
+      ? _c("div", [
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "h2",
+              {
+                staticClass: "mr-4",
+                attrs: { "aria-describedby": "postDate" }
+              },
+              [_vm._v(_vm._s(_vm.post.title))]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "btn-group mt-2", attrs: { role: "group" } },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn button btn-sm btn-warning",
+                    on: { click: _vm.editHandler }
+                  },
+                  [_c("i", { staticClass: "fas fa-edit" })]
+                ),
                 _vm._v(" "),
-                _vm._m(2),
+                _vm._m(0)
+              ]
+            ),
+            _vm._v(" "),
+            _c("p", { staticClass: "text-justify" }, [
+              _vm._v(_vm._s(_vm.post.body))
+            ])
+          ]),
+          _vm._v(" "),
+          _c("small", { staticClass: "postDate form-text text-muted mb-4" }, [
+            _vm._v("Created at: " + _vm._s(_vm.post.created_at))
+          ])
+        ])
+      : _c("div", [
+          _c("form", { on: { submit: _vm.onSubmit } }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "postTitle" } }, [_vm._v("Title")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.post.title,
+                    expression: "post.title"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  id: "postTitle",
+                  placeholder: "Enter post title"
+                },
+                domProps: { value: _vm.post.title },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.post, "title", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "postBody" } }, [_vm._v("Body")]),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.post.body,
+                    expression: "post.body"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  id: "postBody",
+                  placeholder: "Enter post body",
+                  rows: "5"
+                },
+                domProps: { value: _vm.post.body },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.post, "body", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+              [_vm._v("Submit")]
+            )
+          ])
+        ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "deleteModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "deleteModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("Close")]
+                ),
                 _vm._v(" "),
-                _c("div", { staticClass: "modal-footer" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary",
-                      attrs: { type: "button", "data-dismiss": "modal" }
-                    },
-                    [_vm._v("Close")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      attrs: { type: "button" },
-                      on: { click: _vm.deleteHandler }
-                    },
-                    [_vm._v("Remove post")]
-                  )
-                ])
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    attrs: { type: "button" },
+                    on: { click: _vm.deleteHandler }
+                  },
+                  [_vm._v("Remove post")]
+                )
               ])
-            ]
-          )
-        ]
-      )
-    ]),
-    _vm._v(" "),
-    _c("small", { staticClass: "postDate form-text text-muted mb-4" }, [
-      _vm._v("Created at: " + _vm._s(_vm.post.created_at))
-    ]),
-    _vm._v(" "),
-    _c("p", { staticClass: "text-justify" }, [_vm._v(_vm._s(_vm.post.body))])
+            ])
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -44111,22 +44241,12 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "div",
-      { staticClass: "btn-group mt-2", attrs: { role: "group" } },
-      [
-        _c("button", { staticClass: "btn button btn-sm btn-warning" }, [
-          _c("i", { staticClass: "fas fa-edit" })
-        ]),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn button btn-sm btn-danger",
-            attrs: { "data-toggle": "modal", "data-target": "#deleteModal" }
-          },
-          [_c("i", { staticClass: "fas fa-minus" })]
-        )
-      ]
+      "button",
+      {
+        staticClass: "btn button btn-sm btn-danger",
+        attrs: { "data-toggle": "modal", "data-target": "#deleteModal" }
+      },
+      [_c("i", { staticClass: "fas fa-minus" })]
     )
   },
   function() {

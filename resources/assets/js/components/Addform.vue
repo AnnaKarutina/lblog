@@ -34,11 +34,11 @@
                         "content-type": "application/json"
                     },
                     body: JSON.stringify(this.post)
-                }).then(function (data) {
+                }).then(data => {
                     console.log('Request succeeded with response', data);
-                     window.location.href = '/';
+                    window.location.href = '/';
                 })
-                .catch(function (error) {
+                .catch(error => {
                     console.log('Request failed', error);
                 });
             }       
