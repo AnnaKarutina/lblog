@@ -43966,6 +43966,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['postid'],
@@ -44105,15 +44107,17 @@ var render = function() {
                 _vm._v(" "),
                 _vm._m(0)
               ]
-            ),
-            _vm._v(" "),
-            _c("p", { staticClass: "text-justify" }, [
-              _vm._v(_vm._s(_vm.post.body))
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("small", { staticClass: "postDate form-text text-muted mb-4" }, [
+              _vm._v("Created at: " + _vm._s(_vm.post.created_at))
             ])
           ]),
           _vm._v(" "),
-          _c("small", { staticClass: "postDate form-text text-muted mb-4" }, [
-            _vm._v("Created at: " + _vm._s(_vm.post.created_at))
+          _c("p", { staticClass: "text-justify" }, [
+            _vm._v(_vm._s(_vm.post.body))
           ])
         ])
       : _c("div", [

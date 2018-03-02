@@ -7,9 +7,11 @@
                         <button class="btn button btn-sm btn-warning" @click="editHandler"><i class="fas fa-edit"></i></button>
                         <button class="btn button btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-minus"></i></button>
                     </div>
-                    <p class="text-justify">{{ post.body }}</p>
                 </div>
-                <small class="postDate form-text text-muted mb-4">Created at: {{ post.created_at }}</small>
+                <div class="row">
+                    <small class="postDate form-text text-muted mb-4">Created at: {{ post.created_at }}</small>
+                </div>
+                <p class="text-justify">{{ post.body }}</p>
             </div>
             <div v-else>
                 <form @submit="onSubmit">
