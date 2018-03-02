@@ -2,8 +2,14 @@
     <div>
         <h2>Posts</h2>
         <div class="card card-body mb-2" v-for="post in posts" v-bind:key="post.id">
-            <h3>{{ post.title }}</h3>
-            <p>{{ post.body }}</p>
+            <div aria-describedby="postDate">
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.body.substring(0, 50) }} ...</p>
+            </div>
+                <a :href="/post/ + post.id">
+                <button type="button" class="btn btn-primary btn-sm button">Read more</button>
+            </a>
+            <small class="postDate form-text text-muted">Created at: {{ post.created_at }}</small>
         </div>
     </div>
 </template>
@@ -29,3 +35,10 @@
         }
     }
 </script>
+
+<style scoped>
+    button {
+        width: 80px;
+    }
+</style>
+

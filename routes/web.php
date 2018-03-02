@@ -18,3 +18,7 @@ Route::get('/', function () {
 Route::get('/add', function () {
     return view('add');
 });
+
+Route::get('/post/{id}', function ($id) {
+    return view('post')->with('id', $id);
+});
