@@ -16,7 +16,7 @@
         <div id="app">
             <navbar></navbar>
             <div class="container">
-                <posts></posts>
+                @yield('content')
             </div>
         </div>
     </body>
