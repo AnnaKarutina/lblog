@@ -11,7 +11,7 @@
                 <div class="row">
                     <small class="postDate form-text text-muted mb-4">Created at: {{ post.created_at }} by {{ post.user }}</small>
                 </div>
-                <p class="text-justify">{{ post.body }}</p>
+                <p class="text-justify" v-html="post.body"></p>
             </div>
             <div v-else>
                 <form @submit="onSubmit">

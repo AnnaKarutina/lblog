@@ -18,6 +18,7 @@
         <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <script src="//cdn.ckeditor.com/4.6.2/full/ckeditor.js"></script>
     </head>
     <body>
         <div id="app">
