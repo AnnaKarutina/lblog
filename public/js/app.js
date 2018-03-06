@@ -43650,7 +43650,7 @@ exports.push([module.i, "\n.button[data-v-1695e957] {\n    height: 30px !importa
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_ckeditor2__ = __webpack_require__(54);
 //
 //
 //
@@ -43701,8 +43701,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['postid', 'user'],
+    components: { Ckeditor: __WEBPACK_IMPORTED_MODULE_0_vue_ckeditor2__["a" /* default */] },
     data: function data() {
         return {
             edit: false,
@@ -43853,35 +43856,22 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "postBody" } }, [_vm._v("Body")]),
-              _vm._v(" "),
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
+            _c(
+              "div",
+              { staticClass: "form-group" },
+              [
+                _c("ckeditor", {
+                  model: {
                     value: _vm.post.body,
+                    callback: function($$v) {
+                      _vm.$set(_vm.post, "body", $$v)
+                    },
                     expression: "post.body"
                   }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  id: "postBody",
-                  placeholder: "Enter post body",
-                  rows: "5"
-                },
-                domProps: { value: _vm.post.body },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.post, "body", $event.target.value)
-                  }
-                }
-              })
-            ]),
+                })
+              ],
+              1
+            ),
             _vm._v(" "),
             _c(
               "button",

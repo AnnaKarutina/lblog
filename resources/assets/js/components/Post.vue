@@ -20,8 +20,7 @@
                         <input v-model="post.title" type="text" class="form-control" id="postTitle" placeholder="Enter post title">
                     </div>
                     <div class="form-group">
-                        <label for="postBody">Body</label>
-                        <textarea v-model="post.body" class="form-control" id="postBody" placeholder="Enter post body" rows="5"></textarea>
+                        <ckeditor v-model="post.body"></ckeditor>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -49,8 +48,11 @@
 </template>
 
 <script>
+    import Ckeditor from 'vue-ckeditor2'
+
     export default {
         props: ['postid', 'user'],
+        components: { Ckeditor },
         data() {
             return {
                 edit: false,
