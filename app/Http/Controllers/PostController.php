@@ -9,6 +9,12 @@ use App\Http\Resources\Post as PostResource;
 
 class PostController extends Controller
 {
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth', ['except' => ['index', 'show']]);
+    // }
+
     /**
      * Display a listing of the post.
      *
@@ -16,7 +22,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(10);
+        $posts = Post::join('users', 'users.id', '=', 'posts.user_id')
+        ->select('users.name', 'posts.id', 'posts.title', 'posts.body', 'posts.created_at')
+        ->getQuery()->get();
 
         return PostResource::collection($posts);
     }
@@ -34,6 +42,7 @@ class PostController extends Controller
         $post->id = $request->input('post_id');
         $post->title = $request->input('title');
         $post->body = $request->input('body');
+        $post->user_id = $request->input('user_id');
 
         if($post->save()) {
             return new PostResource($post);
@@ -48,7 +57,9 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::join('users', 'users.id', '=', 'posts.user_id')
+        ->select('users.name', 'posts.id', 'posts.title', 'posts.body', 'posts.created_at')
+        ->where('posts.id', '=', $id)->getQuery()->first();
 
         return new PostResource($post);
     }

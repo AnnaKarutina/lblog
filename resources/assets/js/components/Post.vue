@@ -2,14 +2,14 @@
     <div class="container">
             <div v-if="!edit">
                 <div class="row">
-                    <h2 class="mr-4" aria-describedby="postDate">{{ post.title }}</h2>
-                    <div class="btn-group mt-2" role="group">
+                    <h2 class="mr-4 mt-4" aria-describedby="postDate">{{ post.title }}</h2>
+                    <div v-if="this.user == this.post.user" class="btn-group mt-4" role="group">
                         <button class="btn button btn-sm btn-warning" @click="editHandler"><i class="fas fa-edit"></i></button>
                         <button class="btn button btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-minus"></i></button>
                     </div>
                 </div>
                 <div class="row">
-                    <small class="postDate form-text text-muted mb-4">Created at: {{ post.created_at }}</small>
+                    <small class="postDate form-text text-muted mb-4">Created at: {{ post.created_at }} by {{ post.user }}</small>
                 </div>
                 <p class="text-justify">{{ post.body }}</p>
             </div>
@@ -53,10 +53,12 @@
         props: ['postid'],
         data() {
             return {
+                user: window.Laravel.user,
                 edit: false,
                 post: {
                     title: '',
                     body: '',
+                    user: '',
                 },
             }
         },

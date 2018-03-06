@@ -15,7 +15,6 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('navbar', require('./components/Navbar.vue'));
 Vue.component('posts', require('./components/Posts.vue'));
 Vue.component('post', require('./components/Post.vue'));
 Vue.component('addform', require('./components/Addform.vue'));

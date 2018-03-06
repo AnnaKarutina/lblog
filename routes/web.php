@@ -22,3 +22,6 @@ Route::get('/add', function () {
 Route::get('/post/{id}', function ($id) {
     return view('post')->with('id', $id);
 });
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -5,7 +5,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <script>window.Laravel = { csrfToken: '{{ csrf_token() }}' }</script>
+        <script>
+        window.Laravel = { 
+            csrfToken: '{{ csrf_token() }}',
+            user: '{{ Auth::user() ? Auth::user()->name : null }}',
+            id: '{{ Auth::user() ? Auth::user()->id : null }}'
+        }
+        </script>
 
         <title>Laravel Blog</title>
 
@@ -13,10 +19,11 @@
         <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
         <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
     <body>
         <div id="app">
-            <navbar></navbar>
+            @include('layouts.nav')
             <div class="container">
                 @yield('content')
             </div>

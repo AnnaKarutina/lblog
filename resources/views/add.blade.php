@@ -1,5 +1,10 @@
 @extends('main')
 
 @section('content')
-    <addform></addform>
+    @auth
+        <addform></addform>
+    @endauth
+    @guest
+        <p class="mt-4 alert alert-danger">Not authenticated to add posts</p>
+    @endguest
 @endsection

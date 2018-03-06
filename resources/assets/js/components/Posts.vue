@@ -9,13 +9,14 @@
                 <a :href="/post/ + post.id">
                 <button type="button" class="btn btn-primary btn-sm button">Read more</button>
             </a>
-            <small class="postDate form-text text-muted">Created at: {{ post.created_at }}</small>
+            <small class="postDate form-text text-muted">Created at: {{ post.created_at }} by {{ post.user }}</small>
         </div>
     </div>
 </template>
 
 <script>
     export default {
+        props: ['user'],
         data() {
             return {
                 posts: [],

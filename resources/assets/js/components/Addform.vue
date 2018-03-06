@@ -21,7 +21,8 @@
             return {
                 post: {
                     title: '',
-                    body: ''
+                    body: '',
+                    user_id: window.Laravel.id ? window.Laravel.id : 0
                 }
             }
         },
