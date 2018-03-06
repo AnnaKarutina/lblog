@@ -18,6 +18,7 @@ window.Vue = require('vue');
 Vue.component('posts', require('./components/Posts.vue'));
 Vue.component('post', require('./components/Post.vue'));
 Vue.component('addform', require('./components/Addform.vue'));
+Vue.component('dashboard', require('./components/Dashboard.vue'));
 
 const app = new Vue({
     el: '#app'
