@@ -2,7 +2,7 @@
 
 @section('content')
     @auth
-        <addform></addform>
+        <addform user_id="{{ Auth::user() ? Auth::user()->id : null }}"></addform>
     @endauth
     @guest
         <p class="mt-4 alert alert-danger">Not authenticated to add posts</p>

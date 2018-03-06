@@ -43706,10 +43706,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['postid'],
+    props: ['postid', 'user'],
     data: function data() {
         return {
-            user: window.Laravel.user,
             edit: false,
             post: {
                 title: '',
@@ -44073,12 +44072,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['user_id'],
     data: function data() {
         return {
             post: {
                 title: '',
                 body: '',
-                user_id: window.Laravel.id ? window.Laravel.id : 0
+                user_id: this.user_id
             }
         };
     },

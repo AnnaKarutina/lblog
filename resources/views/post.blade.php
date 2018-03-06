@@ -1,5 +1,5 @@
 @extends('main')
 
 @section('content')
-    <post postid="{{ $id }}"></post>
+    <post postid="{{ $id }}" user="{{ Auth::user() ? Auth::user()->name : null }}"></post>
 @endsection

@@ -50,10 +50,9 @@
 
 <script>
     export default {
-        props: ['postid'],
+        props: ['postid', 'user'],
         data() {
             return {
-                user: window.Laravel.user,
                 edit: false,
                 post: {
                     title: '',

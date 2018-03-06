@@ -8,8 +8,6 @@
         <script>
         window.Laravel = { 
             csrfToken: '{{ csrf_token() }}',
-            user: '{{ Auth::user() ? Auth::user()->name : null }}',
-            id: '{{ Auth::user() ? Auth::user()->id : null }}'
         }
         </script>
 

@@ -17,12 +17,13 @@
 
 <script>
     export default {
+        props: ['user_id'],
         data () {
             return {
                 post: {
                     title: '',
                     body: '',
-                    user_id: window.Laravel.id ? window.Laravel.id : 0
+                    user_id: this.user_id
                 }
             }
         },
