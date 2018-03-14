@@ -44118,6 +44118,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -44129,14 +44134,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             post: {
                 title: '',
                 body: '',
-                user_id: this.user_id
-            }
+                user_id: this.user_id,
+                tag: ''
+            },
+            tags: []
         };
+    },
+    created: function created() {
+        this.fetchTags();
     },
 
     methods: {
-        onSubmit: function onSubmit(evt) {
+        fetchTags: function fetchTags() {
             var _this = this;
+
+            fetch('api/tags').then(function (res) {
+                return res.json();
+            }).then(function (res) {
+                _this.tags = res.data;
+            });
+        },
+        onSubmit: function onSubmit(evt) {
+            var _this2 = this;
 
             evt.preventDefault();
             fetch('api/post', {
@@ -44147,7 +44166,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 body: JSON.stringify(this.post)
             }).then(function (data) {
                 console.log('Request succeeded with response', data);
-                console.log(_this.post);
+                console.log(_this2.post);
                 window.location.href = '/';
             }).catch(function (error) {
                 console.log('Request failed', error);
@@ -44214,6 +44233,16 @@ var render = function() {
         ],
         1
       ),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "select",
+          { staticClass: "custom-select custom-select-lg mb-3" },
+          _vm._l(_vm.tags, function(tag) {
+            return _c("option", { key: tag.id }, [_vm._v(_vm._s(tag.title))])
+          })
+        )
+      ]),
       _vm._v(" "),
       _c(
         "button",

@@ -9,6 +9,11 @@
             <div class="form-group">
                 <ckeditor v-model="post.body"></ckeditor>
             </div>
+            <div class="form-group">
+                <select class="custom-select custom-select-lg mb-3">
+                      <option v-for="tag in tags" v-bind:key="tag.id">{{ tag.title }}</option>
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
@@ -25,11 +30,23 @@
                 post: {
                     title: '',
                     body: '',
-                    user_id: this.user_id
-                }
+                    user_id: this.user_id,
+                    tag: '',
+                },
+                tags: []
             }
         },
+        created() {
+            this.fetchTags()
+        },
         methods: {
+            fetchTags() {
+                fetch('api/tags')
+                .then(res => res.json())
+                .then(res => {
+                    this.tags = res.data
+                })
+            },
             onSubmit(evt) {
                 evt.preventDefault()
                 fetch('api/post', {
