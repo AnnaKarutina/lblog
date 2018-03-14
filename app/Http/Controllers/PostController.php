@@ -23,7 +23,8 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::join('users', 'users.id', '=', 'posts.user_id')
-        ->select('users.name', 'posts.id', 'posts.title', 'posts.body', 'posts.created_at')
+        ->join('tags', 'tags.id', '=', 'posts.tag_id')
+        ->select('users.name', 'posts.id', 'posts.title', 'posts.body', 'posts.created_at', 'tags.title as tag')
         ->getQuery()->get();
 
         return PostResource::collection($posts);
@@ -58,7 +59,8 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::join('users', 'users.id', '=', 'posts.user_id')
-        ->select('users.name', 'posts.id', 'posts.title', 'posts.body', 'posts.created_at')
+        ->join('tags', 'tags.id', '=', 'posts.tag_id')
+        ->select('users.name', 'posts.id', 'posts.title', 'posts.body', 'posts.created_at', 'tags.title as tag')
         ->where('posts.id', '=', $id)->getQuery()->first();
 
         return new PostResource($post);

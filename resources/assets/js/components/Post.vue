@@ -59,7 +59,7 @@
                 post: {
                     title: '',
                     body: '',
-                    user: '',
+                    user: ''
                 },
             }
         },
@@ -106,6 +106,7 @@
                 .then(res => res.json())
                 .then(res => {
                     this.post = res.data
+                    console.log(this.post)
                 })
             }
         }

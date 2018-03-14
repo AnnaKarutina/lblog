@@ -21,6 +21,7 @@ class Post extends Resource
             'title' => $this->title,
             'body' => $this->body,
             'created_at' => $this->created_at,
+            'tag' => $this->tag,
         ];
     }
 }

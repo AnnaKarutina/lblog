@@ -31,3 +31,6 @@ Route::put('post', 'PostController@store');
 
 // Delete a post
 Route::delete('post/{id}', 'PostController@destroy');
+
+// List all tags
+Route::get('tags', 'TagController@index');
