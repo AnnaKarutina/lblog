@@ -28,6 +28,8 @@ class TagController extends Controller
      */
     public function show($id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+
+        return new TagResource($tag);
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>Add a new post</h2>
-        <form @submit="onSubmit">
+        <form @submit="onSubmit" id="submitForm">
             <div class="form-group">
                 <label for="postTitle">Title</label>
                 <input v-model="post.title" type="text" class="form-control" id="postTitle" placeholder="Enter post title">
@@ -10,8 +10,8 @@
                 <ckeditor v-model="post.body"></ckeditor>
             </div>
             <div class="form-group">
-                <select class="custom-select custom-select-lg mb-3">
-                      <option v-for="tag in tags" v-bind:key="tag.id">{{ tag.title }}</option>
+                <select form="submitForm" v-model="post.tag_id" class="custom-select custom-select-lg mb-3">
+                    <option v-for="tag in tags" :key="tag.id" :value="tag.id">{{ tag.title }}</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -31,7 +31,7 @@
                     title: '',
                     body: '',
                     user_id: this.user_id,
-                    tag: '',
+                    tag_id: 0,
                 },
                 tags: []
             }
@@ -48,6 +48,7 @@
                 })
             },
             onSubmit(evt) {
+                console.log(JSON.stringify(this.post))
                 evt.preventDefault()
                 fetch('api/post', {
                     method: 'POST',

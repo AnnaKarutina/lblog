@@ -25,3 +25,7 @@ Route::get('/post/{id}', function ($id) {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/tags/{id}', function ($id) {
+    return view('tags')->with('id', $id);
+});

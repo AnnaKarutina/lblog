@@ -24,7 +24,7 @@ class PostController extends Controller
     {
         $posts = Post::join('users', 'users.id', '=', 'posts.user_id')
         ->join('tags', 'tags.id', '=', 'posts.tag_id')
-        ->select('users.name', 'posts.id', 'posts.title', 'posts.body', 'posts.created_at', 'tags.title as tag')
+        ->select('users.name', 'users.id as user_id', 'posts.id', 'posts.title', 'posts.body', 'posts.created_at', 'tags.title as tag', 'tags.id as tag_id')
         ->getQuery()->get();
 
         return PostResource::collection($posts);
@@ -44,6 +44,7 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         $post->user_id = $request->input('user_id');
+        $post->tag_id = $request->input('tag_id');
 
         if($post->save()) {
             return new PostResource($post);
@@ -60,7 +61,7 @@ class PostController extends Controller
     {
         $post = Post::join('users', 'users.id', '=', 'posts.user_id')
         ->join('tags', 'tags.id', '=', 'posts.tag_id')
-        ->select('users.name', 'posts.id', 'posts.title', 'posts.body', 'posts.created_at', 'tags.title as tag')
+        ->select('users.name', 'users.id as user_id', 'posts.id', 'posts.title', 'posts.body', 'posts.created_at', 'tags.title as tag', 'tags.id as tag_id')
         ->where('posts.id', '=', $id)->getQuery()->first();
 
         return new PostResource($post);

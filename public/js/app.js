@@ -377,33 +377,6 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -507,6 +480,33 @@ module.exports = function normalizeComponent (
     options: options
   }
 }
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
 
 
 /***/ }),
@@ -1390,7 +1390,7 @@ function applyToTag (styleElement, obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(14);
-module.exports = __webpack_require__(59);
+module.exports = __webpack_require__(62);
 
 
 /***/ }),
@@ -1418,6 +1418,7 @@ Vue.component('posts', __webpack_require__(42));
 Vue.component('post', __webpack_require__(48));
 Vue.component('addform', __webpack_require__(53));
 Vue.component('dashboard', __webpack_require__(56));
+Vue.component('tag', __webpack_require__(59));
 
 var app = new Vue({
   el: '#app'
@@ -18586,7 +18587,7 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(17)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(17)(module)))
 
 /***/ }),
 /* 17 */
@@ -43075,7 +43076,7 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(40).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(40).setImmediate))
 
 /***/ }),
 /* 40 */
@@ -43142,7 +43143,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 41 */
@@ -43335,7 +43336,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(5)))
 
 /***/ }),
 /* 42 */
@@ -43346,7 +43347,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(43)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(46)
 /* template */
@@ -43622,7 +43623,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(49)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(51)
 /* template */
@@ -43760,11 +43761,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['postid', 'user'],
+    props: ['postid', 'user', 'user_id'],
     components: { Ckeditor: __WEBPACK_IMPORTED_MODULE_0_vue_ckeditor2__["a" /* default */] },
     data: function data() {
         return {
@@ -43772,12 +43778,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             post: {
                 title: '',
                 body: '',
-                user: ''
-            }
+                user: '',
+                user_id: 0,
+                tag_id: 0
+            },
+            tags: []
         };
     },
     created: function created() {
         this.fetchPost(this.postid);
+        this.fetchTags();
     },
 
     methods: {
@@ -43788,6 +43798,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             evt.preventDefault();
+            console.log(JSON.stringify({
+                post_id: this.postid,
+                title: this.post.title,
+                body: this.post.body,
+                user_id: this.post.user_id,
+                tag_id: this.post.tag_id
+            }));
             fetch('/api/post', {
                 method: 'PUT',
                 headers: {
@@ -43796,7 +43813,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 body: JSON.stringify({
                     post_id: this.postid,
                     title: this.post.title,
-                    body: this.post.body
+                    body: this.post.body,
+                    user_id: this.post.user_id,
+                    tag_id: this.post.tag_id
                 })
             }).then(function (data) {
                 console.log('Request succeeded with response', data);
@@ -43822,7 +43841,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return res.json();
             }).then(function (res) {
                 _this2.post = res.data;
-                console.log(_this2.post);
+            });
+        },
+        fetchTags: function fetchTags() {
+            var _this3 = this;
+
+            fetch('/api/tags').then(function (res) {
+                return res.json();
+            }).then(function (res) {
+                _this3.tags = res.data;
             });
         }
     }
@@ -43886,60 +43913,108 @@ var render = function() {
           })
         ])
       : _c("div", [
-          _c("form", { on: { submit: _vm.onSubmit } }, [
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "postTitle" } }, [_vm._v("Title")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.post.title,
-                    expression: "post.title"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  id: "postTitle",
-                  placeholder: "Enter post title"
-                },
-                domProps: { value: _vm.post.title },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+          _c(
+            "form",
+            { attrs: { id: "submitForm" }, on: { submit: _vm.onSubmit } },
+            [
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "postTitle" } }, [_vm._v("Title")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.post.title,
+                      expression: "post.title"
                     }
-                    _vm.$set(_vm.post, "title", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-group" },
-              [
-                _c("ckeditor", {
-                  model: {
-                    value: _vm.post.body,
-                    callback: function($$v) {
-                      _vm.$set(_vm.post, "body", $$v)
-                    },
-                    expression: "post.body"
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    id: "postTitle",
+                    placeholder: "Enter post title"
+                  },
+                  domProps: { value: _vm.post.title },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.post, "title", $event.target.value)
+                    }
                   }
                 })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-              [_vm._v("Submit")]
-            )
-          ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "form-group" },
+                [
+                  _c("ckeditor", {
+                    model: {
+                      value: _vm.post.body,
+                      callback: function($$v) {
+                        _vm.$set(_vm.post, "body", $$v)
+                      },
+                      expression: "post.body"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.post.tag_id,
+                        expression: "post.tag_id"
+                      }
+                    ],
+                    staticClass: "custom-select custom-select-lg mb-3",
+                    attrs: { form: "submitForm" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.post,
+                          "tag_id",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(_vm.tags, function(tag) {
+                    return _c(
+                      "option",
+                      { key: tag.id, domProps: { value: tag.id } },
+                      [_vm._v(_vm._s(tag.title))]
+                    )
+                  })
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                [_vm._v("Submit")]
+              )
+            ]
+          )
         ]),
     _vm._v(" "),
     _c(
@@ -44053,7 +44128,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(54)
 /* template */
@@ -44135,7 +44210,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 title: '',
                 body: '',
                 user_id: this.user_id,
-                tag: ''
+                tag_id: 0
             },
             tags: []
         };
@@ -44157,6 +44232,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         onSubmit: function onSubmit(evt) {
             var _this2 = this;
 
+            console.log(JSON.stringify(this.post));
             evt.preventDefault();
             fetch('api/post', {
                 method: 'POST',
@@ -44186,7 +44262,7 @@ var render = function() {
   return _c("div", [
     _c("h2", [_vm._v("Add a new post")]),
     _vm._v(" "),
-    _c("form", { on: { submit: _vm.onSubmit } }, [
+    _c("form", { attrs: { id: "submitForm" }, on: { submit: _vm.onSubmit } }, [
       _c("div", { staticClass: "form-group" }, [
         _c("label", { attrs: { for: "postTitle" } }, [_vm._v("Title")]),
         _vm._v(" "),
@@ -44237,9 +44313,39 @@ var render = function() {
       _c("div", { staticClass: "form-group" }, [
         _c(
           "select",
-          { staticClass: "custom-select custom-select-lg mb-3" },
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.post.tag_id,
+                expression: "post.tag_id"
+              }
+            ],
+            staticClass: "custom-select custom-select-lg mb-3",
+            attrs: { form: "submitForm" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.post,
+                  "tag_id",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
+          },
           _vm._l(_vm.tags, function(tag) {
-            return _c("option", { key: tag.id }, [_vm._v(_vm._s(tag.title))])
+            return _c("option", { key: tag.id, domProps: { value: tag.id } }, [
+              _vm._v(_vm._s(tag.title))
+            ])
           })
         )
       ]),
@@ -44267,7 +44373,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(57)
 /* template */
@@ -44414,6 +44520,167 @@ if (false) {
 
 /***/ }),
 /* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(60)
+/* template */
+var __vue_template__ = __webpack_require__(61)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/Tag.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-db45319a", Component.options)
+  } else {
+    hotAPI.reload("data-v-db45319a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['id'],
+    data: function data() {
+        return {
+            posts: [],
+            tag: ''
+        };
+    },
+    created: function created() {
+        this.fetchPosts();
+        this.fetchTag(this.id);
+    },
+
+    methods: {
+        fetchPosts: function fetchPosts() {
+            var _this = this;
+
+            fetch('/api/posts').then(function (res) {
+                return res.json();
+            }).then(function (res) {
+                _this.posts = res.data;
+            });
+        },
+        fetchTag: function fetchTag(id) {
+            var _this2 = this;
+
+            fetch('/api/tag/' + id).then(function (res) {
+                return res.json();
+            }).then(function (res) {
+                _this2.tag = res.data.id;
+            });
+        },
+        idCompare: function idCompare(id) {
+            return this.tag == id;
+        }
+    }
+});
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "table",
+      { staticClass: "table table-striped" },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._l(_vm.posts, function(post) {
+          return _vm.idCompare(post.tag_id)
+            ? _c("tr", { key: post.id }, [
+                _c("td", [
+                  _c("a", { attrs: { href: /post/ + post.id } }, [
+                    _vm._v(_vm._s(post.title))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(post.created_at))])
+              ])
+            : _vm._e()
+        })
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("Name")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Date")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-db45319a", module.exports)
+  }
+}
+
+/***/ }),
+/* 62 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

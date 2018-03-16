@@ -14,13 +14,18 @@
                 <p class="text-justify" v-html="post.body"></p>
             </div>
             <div v-else>
-                <form @submit="onSubmit">
+                <form @submit="onSubmit" id="submitForm">
                     <div class="form-group">
                         <label for="postTitle">Title</label>
                         <input v-model="post.title" type="text" class="form-control" id="postTitle" placeholder="Enter post title">
                     </div>
                     <div class="form-group">
                         <ckeditor v-model="post.body"></ckeditor>
+                    </div>
+                    <div class="form-group">
+                        <select form="submitForm" v-model="post.tag_id" class="custom-select custom-select-lg mb-3">
+                            <option v-for="tag in tags" :key="tag.id" :value="tag.id">{{ tag.title }}</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -51,7 +56,7 @@
     import Ckeditor from 'vue-ckeditor2'
 
     export default {
-        props: ['postid', 'user'],
+        props: ['postid', 'user', 'user_id'],
         components: { Ckeditor },
         data() {
             return {
@@ -59,12 +64,16 @@
                 post: {
                     title: '',
                     body: '',
-                    user: ''
+                    user: '',
+                    user_id: 0,
+                    tag_id: 0
                 },
+                tags: []
             }
         },
         created() {
             this.fetchPost(this.postid);
+            this.fetchTags();
         },
         methods: {
             editHandler() {
@@ -72,6 +81,15 @@
             },
             onSubmit(evt) {
                evt.preventDefault()
+               console.log(
+                   JSON.stringify({
+                        post_id: this.postid,
+                        title: this.post.title,
+                        body: this.post.body,
+                        user_id: this.post.user_id,
+                        tag_id: this.post.tag_id
+                    })
+               )
                 fetch('/api/post', {
                     method: 'PUT',
                     headers: {
@@ -80,7 +98,9 @@
                     body: JSON.stringify({
                         post_id: this.postid,
                         title: this.post.title,
-                        body: this.post.body
+                        body: this.post.body,
+                        user_id: this.post.user_id,
+                        tag_id: this.post.tag_id
                     })
                 }).then(data => {
                     console.log('Request succeeded with response', data);
@@ -106,7 +126,13 @@
                 .then(res => res.json())
                 .then(res => {
                     this.post = res.data
-                    console.log(this.post)
+                })
+            },
+            fetchTags() {
+                fetch('/api/tags')
+                .then(res => res.json())
+                .then(res => {
+                    this.tags = res.data
                 })
             }
         }

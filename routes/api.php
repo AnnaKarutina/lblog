@@ -34,3 +34,6 @@ Route::delete('post/{id}', 'PostController@destroy');
 
 // List all tags
 Route::get('tags', 'TagController@index');
+
+// Show single tag
+Route::get('tag/{id}', 'TagController@show');

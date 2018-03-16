@@ -18,10 +18,12 @@ class Post extends Resource
         return [
             'id' => $this->id,
             'user' => $this->name,
+            'user_id' => $this->user_id,
             'title' => $this->title,
             'body' => $this->body,
             'created_at' => $this->created_at,
             'tag' => $this->tag,
+            'tag_id' => $this->tag_id,
         ];
     }
 }
